@@ -124,16 +124,30 @@ if cfg_config == "Desde 0":
 
     st.write(st.session_state.vote_config)
 
-col_left,col_center,col_right = st.columns(3, gap = "small")
+    col_left,col_center,col_right = st.columns(3, gap = "small")
 
-with col_left:
-    st.download_button(
-        label = "Descargar configuración",
-        data = st.session_state.vote_config.to_csv(index=False).encode("utf8"),
-        file_name = "vote_config.csv")
+    with col_left:
+        st.download_button(
+            label = "Descargar configuración",
+            data = st.session_state.vote_config.to_csv(index=False).encode("utf8"),
+            file_name = "vote_config.csv")
 
-with col_right:
-    show_as_text = st.button(label = "Mostrar en texto plano")
+    with col_right:
+        show_as_text = st.button(label = "Mostrar en texto plano")
 
-if show_as_text:
-    st.code(st.session_state.vote_config.to_csv(index=False))
+    if show_as_text:
+        st.code(st.session_state.vote_config.to_csv(index=False))
+
+
+else:
+    this_file =  st.file_uploader(
+        label="Subir vote config",
+        type="csv",
+        accept_multiple_files=False,
+        help="Puedes subir tu propia configuración para revisarla o editarla."
+        )
+
+    if this_file is not None:
+        # Can be used wherever a "file-like" object is accepted:
+        user_dataframe = pd.read_csv(this_file, sep = ",")
+        st.write(user_dataframe)

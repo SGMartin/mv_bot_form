@@ -14,7 +14,6 @@ with st.sidebar:
         ("Desde 0", "Tengo mi propio fichero")
     )
 
-st.subheader("Tu configuración")
 
 if cfg_config == "Desde 0":
     
@@ -25,7 +24,7 @@ if cfg_config == "Desde 0":
     )
 
     next_player = st.text_input(
-        label = "Añadir jugador",
+        label = "Introduce un nombre de usuario",
         value = "",
         help = "Introduce el nick del jugador en mediavida",
         placeholder = "Jiub"
@@ -33,7 +32,7 @@ if cfg_config == "Desde 0":
 
     vote_config = {
         "player": ["no_lynch"],
-        "can_be_voted": [int(no_lynch_allowed)],
+        "can_be_voted": [1],
         "allowed_votes": [0],
         "mod_to_lynch":[0],
         "is_mayor": [0]
@@ -43,6 +42,11 @@ if cfg_config == "Desde 0":
 
     if  "vote_config" not in st.session_state:
         st.session_state["vote_config"] = pd_config
+
+    ## Set no lynch ON/OFF
+    st.session_state["vote_config"].loc[
+        st.session_state["vote_config"]["player"] == "no_lynch", "can_be_voted"
+        ] = int(no_lynch_allowed)
 
     is_valid_player = False
     if next_player != "":
@@ -92,7 +96,7 @@ if cfg_config == "Desde 0":
 
 
                 add_player = st.button(
-                    label = "Añadir jugador"
+                    label = "Añadir/Modificar jugador"
                 )
 
                 if add_player:
@@ -122,6 +126,7 @@ if cfg_config == "Desde 0":
                         pd_config = pd.concat([st.session_state["vote_config"], new_player])
                     st.session_state["vote_config"] = pd_config
 
+    st.subheader("Tabla de configuración actual")
     st.write(st.session_state.vote_config)
 
     col_left,col_center,col_right = st.columns(3, gap = "small")

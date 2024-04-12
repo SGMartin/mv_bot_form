@@ -5,6 +5,8 @@ import re
 import streamlit as st 
 
 from bs4 import BeautifulSoup
+from io import BytesIO
+from PIL import Image
 
 st.title("Configurador de partidas de mafia")
 
@@ -62,7 +64,12 @@ if cfg_config == "Desde 0":
             else:
                 this_avatar = this_profile.find("div", class_ = ["user-avatar"]).find("img")
                 this_avatar = this_avatar["src"]
-                st.write(f"![test]({this_avatar})")
+
+                ## Strange trick here... convert to np array on the fly and plot it back?
+                this_avatar_img = requests.get(this_avatar).content
+                pilimage = Image.open(BytesIO(this_avatar_img)).convert("RGB")
+                pilimage = np.asarray(pilimage)
+                st.image(pilimage)
 
                 is_valid_player = True
                 allowed_votes = st.slider(

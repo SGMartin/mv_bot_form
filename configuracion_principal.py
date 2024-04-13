@@ -9,6 +9,7 @@ from io import BytesIO
 from PIL import Image
 
 st.title("Configurador de partidas de mafia")
+st.subheader("Configuración de jugadores y votos")
 
 with st.sidebar:
     cfg_config = st.radio(
@@ -60,14 +61,14 @@ if cfg_config == "Desde 0":
             profile_header = this_profile.find("h1")
 
             if re.findall("^ERROR", profile_header.text):
-                st.write("Este perfil no existe en MV")
+                st.write("**ERROR: ¡Este perfil no existe en MV!**")
             else:
                 this_avatar = this_profile.find("div", class_ = ["user-avatar"]).find("img")
                 this_avatar = this_avatar["src"]
 
                 ## Strange trick here... convert to np array on the fly and plot it back?
                 this_avatar_img = requests.get(this_avatar).content
-                pilimage = Image.open(BytesIO(this_avatar_img)).convert("RGB")
+                pilimage = Image.open(BytesIO(this_avatar_img)).convert("RGBA")
                 pilimage = np.asarray(pilimage)
                 st.image(pilimage)
 

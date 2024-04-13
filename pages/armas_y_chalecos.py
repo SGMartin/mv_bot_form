@@ -4,16 +4,6 @@ import streamlit as st
 
 st.title("Configuración de armas y chalecos")
 
-attack_defense = {
-    "player": [],
-    "attack": [],
-    "defense": [],
-    "last_shot": []
-}
-
-
-attack_and_defense = pd.DataFrame.from_dict(attack_defense)
-
 if  "vote_config" not in st.session_state:
     st.write("**ERROR: ¡Rellena primero la configuración principal!**")
 else:

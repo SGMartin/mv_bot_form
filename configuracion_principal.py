@@ -70,13 +70,18 @@ if cfg_config == "Desde 0":
                 next_player = human_name
                 
                 this_avatar = this_profile.find("div", class_ = ["user-avatar"]).find("img")
-                this_avatar = this_avatar["src"]
 
-                ## Strange trick here... convert to np array on the fly and plot it back?
-                this_avatar_img = requests.get(this_avatar).content
-                pilimage = Image.open(BytesIO(this_avatar_img)).convert("RGBA")
-                pilimage = np.asarray(pilimage)
-                st.image(pilimage)
+                if this_avatar:
+
+                    this_avatar = this_avatar["src"]
+
+                    ## Strange trick here... convert to np array on the fly and plot it back?
+                    this_avatar_img = requests.get(this_avatar).content
+                    pilimage = Image.open(BytesIO(this_avatar_img)).convert("RGBA")
+                    pilimage = np.asarray(pilimage)
+                    st.image(pilimage)
+                else:
+                    st.write("No avatar for this player")
 
                 is_valid_player = True
                 allowed_votes = st.slider(

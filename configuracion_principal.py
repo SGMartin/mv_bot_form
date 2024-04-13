@@ -57,12 +57,18 @@ if cfg_config == "Desde 0":
         this_player = requests.get(f"https://www.mediavida.com/id/{next_player}")
 
         if this_player.status_code != 404:
+
             this_profile = BeautifulSoup(this_player.text, "html.parser")
             profile_header = this_profile.find("h1")
 
             if re.findall("^ERROR", profile_header.text):
                 st.write("**ERROR: ¡Este perfil no existe en MV!**")
             else:
+                # find the real, human readable name
+                human_name = this_profile.find("div", class_ = ["cover-content fullw"]).find("a").find("h1").text
+                # Set player name to human name
+                next_player = human_name
+                
                 this_avatar = this_profile.find("div", class_ = ["user-avatar"]).find("img")
                 this_avatar = this_avatar["src"]
 
